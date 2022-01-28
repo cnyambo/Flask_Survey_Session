@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}
+    Thank you Page
+{% endblock %}
+{% block content%}
+<h3>Thank You</h3>
+<div class="center">
+    <p>These are your answers </p>
+    
+    <ol>
+        {% for val in session['final_resp'] %}
+            {% if val["comment"]%}
+                <li>"answer":{{ val["answer"]}}, "comment":{{val["comment"]}}</li>
+            {%else%}
+                <li>{{val["answer"]}}</li>
+            {% endif %}
+        {% endfor%}
+    </ol>
+</div>
+{% endblock %}

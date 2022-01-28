@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+    Survey Page
+{% endblock %}
+{% block content%}
+<h3>{{question.question}}</h3> 
+<div class="center">
+    <p>{{question.allow_text}}</p>
+    <form  action="/survey" method="POST">
+        {% if question.allow_text%}
+            {% for i in question.choices %}
+                <p><input type="radio" value="{{i}}" name="answer"/>{{i}}</p>
+                
+            {% endfor%}
+            <p><textarea name="comment" placeholder="add comment" rows="5"></textarea></p>
+        {% else %} 
+            {% for i in question.choices %}
+                <p><input type="radio" value="{{i}}" name="answer"/>{{i}}</p>   
+            {% endfor%}
+        {%endif%}
+        <button>continue</button>
+    </form>
+</div>
+{% endblock %}
