@@ -7,14 +7,14 @@
 <div class="center">
     <p>These are your answers </p>
     
-    <ol>
-        {% for val in session['final_resp'] %}
+     <ol>
+        {% for val in session['answers'] %}
             {% if val["comment"]%}
                 <li>"answer":{{ val["answer"]}}, "comment":{{val["comment"]}}</li>
             {%else%}
                 <li>{{val["answer"]}}</li>
             {% endif %}
         {% endfor%}
-    </ol>
+    </ol> 
 </div>
 {% endblock %}

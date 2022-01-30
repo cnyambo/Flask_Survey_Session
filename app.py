@@ -6,7 +6,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SECRET_KEY'] = "123@45#"
 
 
-responses =[]
+#responses =[]
 final_resp =""
 surv =""
 submitted = ""
@@ -22,9 +22,9 @@ def page():
     survey = request.form.get("select_survey")
     if survey is None:
         return redirect('/')
-    #elif survey in surveys_done:
-        #flash(f"You submitted the survey {survey}")
-        #return redirect('/')
+    elif survey in surveys_done:
+        flash(f"You submitted the survey {survey}")
+        return redirect('/')
     else:
         session['surv'] = survey
         print("**************Session***************")
@@ -45,8 +45,9 @@ def questions(nums):
 
     sid = session['surv']
 
-    if (len(list(responses)) == len(list(surveys[sid].questions))):
-           return redirect("/done")
+    if (len(list(session['final_resp'] )) == len(list(surveys[sid].questions))):
+        session['answers'] = session['final_resp']
+        return redirect("/done")
     if (nums > len(surveys[sid].questions)):
         flash(f"Invalid question id: {nums}.")
         return redirect(f"/questions/{len(responses)}")
@@ -55,12 +56,16 @@ def questions(nums):
 
 @app.route("/survey", methods=["POST"])
 def submit_survey():
+
+    #session['final_resp'].append(....)
+    responses = session['final_resp']
     resp = request.form['answer']
     comment = request.form.get('comment',"")
     responses.append({'answer':resp, 'comment':comment})
     session['final_resp'] = responses
     sid = session['surv'] 
-    if (len(responses) == len(surveys[sid].questions)):
+    if (len(session['final_resp']) == len(surveys[sid].questions)):
+        session['final_resp'] =[]
         return redirect("/done")
     else:
         return redirect(f"/questions/{len(responses)}")
@@ -69,6 +74,7 @@ def submit_survey():
 def submit():
     surveys_done.append(session['surv'])
     print("bbbbbbbbbbbbbbbbbbbbbbbbb")
-    print(surveys_done, len(responses))
+    print(surveys_done)
+    
     return render_template('thank.html')
 
